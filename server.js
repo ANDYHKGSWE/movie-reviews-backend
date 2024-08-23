@@ -166,22 +166,15 @@ app.delete('/reviews/:id', authenticateToken, async (req, res, next) => {
 		await prisma.review.delete({
 			where: { id: parseInt(id, 10) },
 		});
-		res.json({ message: 'Recensionen har tagits bort.' });
+		res.sendStatus(204);
 	} catch (error) {
 		console.error(error); // Logga felet till konsolen
 		next(error); // Skicka felet vidare till felhanteringsmiddleware
 	}
 });
 
-// Middleware för felhantering
-app.use((err, req, res, next) => {
-	console.error(err.stack);
-	res
-		.status(500)
-		.json({ error: 'Ett internt serverfel inträffade.', details: err.message });
-});
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-	console.log(`Server is running on http://localhost:${port}`);
+// Starta servern
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+	console.log(`Server running on port ${PORT}`);
 });
